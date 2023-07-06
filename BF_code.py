@@ -23,8 +23,6 @@ def strconv(convconfig):                        # converting a bin configuration
             str1+=str(convconfig[1][i][j])
     return str1
 
-
-
 def convert(config,L):                          # describing the bin configuration (an array of arrays, i.e., a collection of open bins) in terms of item counts
     n = len(config)
     config1 = copy.deepcopy(config)
@@ -64,8 +62,6 @@ def BF(config,item,L):                    # simulating best fit for a particular
             
         config1.sort(key=cmp_to_key(compare))    
         return config1  
-    
-
 
 def AsymBF(L,p):                              # finds asymptotic performance of BF for the list L with given probabilities p. i.e., returns alpha where alpha*n 
    n = len(L)                                 # is the expected number of bins used by BF for (L,p)
@@ -87,9 +83,6 @@ def AsymBF(L,p):                              # finds asymptotic performance of 
         BF+= x[0][ind2]*M[ind1][ind2]
    
    return BF
-
-
-
          
 def ConfigGraphGen(L,p):                  # generates the markov chain for the list L with probabilities p
     n = len(L)
@@ -99,8 +92,7 @@ def ConfigGraphGen(L,p):                  # generates the markov chain for the l
     encounteredconv = []                  # already seen states in converted format
     G = nx.DiGraph()
     
-    while(flag == 0):
-            
+    while(flag == 0):         
         for i in range(n):
             if(i==0):
                 encountered.append(queue[0])                        # initialization with empty bin
@@ -130,28 +122,21 @@ def ConfigGraphGen(L,p):                  # generates the markov chain for the l
             flag = 1
     return G
 
-
-
 def ConfigTransitionMatrix(G):      # generates the markov transition matrix from the markov chain graph
     n = len(G.nodes())
     nodes  = list(G.nodes())
-    edges = list(G.edges())
-    
-    
+    edges = list(G.edges())  
     M = [ [0] * n for _ in range(n+1)]
     for i in range(n):
         M[n][i] = 1
-        M[i][i] = -1
-        
+        M[i][i] = -1      
     for edge in edges:
         edgedict = G.get_edge_data(edge[0], edge[1])
         ind1 = nodes.index(edge[0])
         ind2 = nodes.index(edge[1])
         M[ind2][ind1] = edgedict['weight'] 
     return M
-
-
-
+ 
 def NewBinEdges(G):                # lists the transitions that create new bins
     edges = list(G.edges())
     nodes = list(G.nodes()) 
